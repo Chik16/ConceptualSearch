@@ -1,5 +1,4 @@
 from sklearn.cluster import KMeans
-
 from collections import defaultdict
 from gensim.models.word2vec import Word2Vec
 from Utils.file_utils import  load_stop_words
@@ -8,10 +7,12 @@ import numpy as np
 import time
 import sys
 
+
 def get_vector(item, model):
     vocab = model.vocab[item]
     vector = model.syn0[vocab.index]
     return vector
+
 
 def get_norm_vector(item, model):
     if item not in model.vocab:
@@ -23,8 +24,10 @@ def get_norm_vector(item, model):
         return vec / norm
     return vec
 
+
 def map_keyword(kw):
     return kw.replace(" ", "_")
+
 
 def extract_clusters(ids, id2kwd):
     clusters = defaultdict(set)
@@ -32,6 +35,7 @@ def extract_clusters(ids, id2kwd):
         kw = id2kwd[kw_id]
         clusters[label].add(kw)
     return clusters
+
 
 # expand at query time
 # use with tfidf (on cluster labels) at index time by just mapping to cluster label

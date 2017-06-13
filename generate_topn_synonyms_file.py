@@ -4,8 +4,10 @@ from Utils.file_utils import load_stop_words
 from Config.generate_topn_synonyms_config import GenerateTopNSynonymsConfig
 import sys
 
+
 def map_keyword(kw):
     return kw.replace(" ", "_")
+
 
 def write_most_similar_synonyms(topn, key_words, model, payload_file, synonym_file):
     key_words = set(key_words)
@@ -40,9 +42,11 @@ def write_most_similar_synonyms(topn, key_words, model, payload_file, synonym_fi
             else:
                 no_sim.add(word)
                 #print("No matching similar terms in word2vec model for term: %s" % word)
+
     with open(synonym_file, "w+") as f:
         for syn in sorted(processed_syns):
             f.write("%s=>%s\n" % (syn, map_keyword(syn)))
+
     #Returned for analysis - do something with this if you need to investigate
     return missing, no_sim, processed_syns
 
@@ -57,8 +61,8 @@ model = Word2Vec.load(config.model_file)
 print("Word2Vec model loaded")
 
 keywords = set()
-for file in config.keywords_files:
-    keywords.update(load_stop_words(file))
+for f in config.keywords_files:
+    keywords.update(load_stop_words(f))
 print("%i keywords loaded" % (len(keywords)))
 
 missing, no_sim, processed_syns = write_most_similar_synonyms(config.top_n, keywords, model, config.payload_synonyms_file, config.synonyms_file)
